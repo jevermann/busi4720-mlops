@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Boston Housing Data Prediction Service</title>
+    </head>
+    <body>
+    <h1>Boston Housing Data Inputs</h1>
+    <form action="/predict_form" method="post">
+        <p>
+            <label for="rooms">Number of Rooms</label>
+            <input name="rooms" id="rooms" placeholder="6.0" required>
+        </p>
+        <p>
+            <label for="tax">Property Tax Rate per $10,000</label>
+            <input name="tax" id="tax" placeholder="250.0" required>
+        </p>
+        <p>
+            <label for="age">Proportion of buildings older than 1940</label>
+            <input name="age" id="age" placeholder="66.5" required>
+        </p>
+      <input type="submit" value="Submit">
+    </form>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Boston Housing Data Prediction Service</title>
+        <script>
+            async function predict() {
+                // Get the values from the text inputs
+                const rooms = parseFloat(document.getElementById('rooms').value) || 0;
+                const tax = parseFloat(document.getElementById('tax').value) || 0;
+                const age = parseFloat(document.getElementById('age').value) || 0;
+                // Create a JSON payload
+                const payload = JSON.stringify([rooms, tax, age]);
+
+                // Make a POST request to the WSGI server
+                const response = await fetch('/predict_json', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: payload
+                });
+                // Parse the JSON response
+                const result = await response.json();
+                // Display the result
+                document.getElementById('output-div').textContent = 'Prediction: ' + result.prediction;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Boston Housing Data Inputs</h1>
+            <form onsubmit="event.preventDefault(); predict();">
+            <p>
+                <label for="rooms">Number of Rooms</label>
+                <input name="rooms" id="rooms" placeholder="6.0" required>
+            </p>
+            <p>
+                <label for="tax">Property Tax Rate per $10,000</label>
+                <input name="tax" id="tax" placeholder="250.0" required>
+            </p>
+            <p>
+                <label for="age">Proportion of buildings older than 1940</label>
+                <input name="age" id="age" placeholder="66.5" required>
+            </p>
+            <input type="submit" value="Submit">
+        </form>
+        <p>Prediction is: <div id="output-div">No prediction result yet ...</div></p>
+    </body>
+</html>
