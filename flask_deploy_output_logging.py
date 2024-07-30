@@ -10,13 +10,14 @@ model_name = 'norm.boston.model.trained'
 req_logger = logging.getLogger(model_name + '.requests')
 req_logger.setLevel(logging.INFO)
 req_logger.addHandler(
-    logging.FileHandler(
-        model_name+'.requests.log'))
-# req_logger.addHandler(
-#     logging.handlers.RotatingFileHandler(
-#         model_name+'.requests.log',
-#         maxBytes=1000000,
-#         backupCount=5))
+    logging.handlers.RotatingFileHandler(
+        model_name+'.requests.log',
+        maxBytes=1000000,
+        backupCount=5))
+
+pred_logger = logging.getLogger(model_name + '.predictions')
+pred_logger.setLevel(logging.INFO)
+pred_logger.addHandler(logging.FileHandler(model_name + '.predictions.log'))
 
 # Load the trained model
 norm_boston_model = keras.saving.load_model(model_name+'.save')
@@ -60,7 +61,7 @@ def predict_json():
     inputs = pd.DataFrame.from_dict(request.json).transpose()
     prediction = predict(inputs)
     # TODO: Output checking goes here
-    # TODO: Output logging goes here
+    pred_logger.info('"%s", %s, %s, %s, %d', time.ctime(), inputs.iloc[0,0], inputs.iloc[0,1], inputs.iloc[0,2], prediction)
     reply["prediction"] = str(prediction)
     reply["success"] = True
     return flask.jsonify(reply)
@@ -76,7 +77,7 @@ def predict_form():
     inputs = pd.DataFrame([float(i) for i in request.form.to_dict().values()]).transpose()
     prediction = predict(inputs)
     # TODO: Output checking goes here
-    # TODO: Output logging goes here
+    pred_logger.info('"%s", %s, %s, %s, %d', time.ctime(), inputs.iloc[0,0], inputs.iloc[0,1], inputs.iloc[0,2], prediction)
     return flask.render_template("predict_result.html", prediction=str(prediction))
 
 app.run()
