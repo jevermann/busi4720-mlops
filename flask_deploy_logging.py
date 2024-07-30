@@ -68,7 +68,6 @@ def predict_json():
 @app.route("/predict_form", methods=["POST"])
 def predict_form():
     # TODO: Input checking goes here
-    # TODO: Input logging goes here
     inputs = pd.DataFrame([float(i) for i in request.form.to_dict().values()]).transpose()
     prediction = predict(inputs)
     # TODO: Output checking goes here
